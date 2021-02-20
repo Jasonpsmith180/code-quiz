@@ -8,16 +8,35 @@
     <title>Code-Quiz</title>
 </head>
     <body>
-        <button id="highScores">High Scores</button>
-        <p id="timer">Time: 0</p>
+        <header>
+            <button id="highScores">High Scores</button>
+        </header>
         <main class="container">
-            <h1 class="welcome">Code Quiz!</h1>
-            <h2>Welcome to the JavaScript code quiz!</h2>
-            <p>
-                When you press the start button the quiz will start. The quiz is timed so watch the clock!
-            </p>
-            <button id="start">Start the Quiz!</button>
-            <h2 id="startCountdown"></h2>
+            <section id="start-container">
+                <h1 class="welcome">Code Quiz!</h1>
+                <h2>Welcome to the JavaScript code quiz!</h2>
+                <p>
+                    When you press the start button the quiz will start. The quiz is timed so watch the clock!
+                </p>
+                <button id="start">Start the Quiz!</button>
+                <h2 id="startCountdown"></h2>
+            </section>
+            <section id="question-container" class="hide">
+                <p id="timer">Time: 0</p>
+                <h2 id="question">Question</h2>
+                <div id="answer-buttons" class="button-grid">
+                </div>
+            </section>
+            <section id="end-game-container" class="hide">
+                <h2>End of the game!</h2>
+                <h3 id='score'></h3>
+                <p>Please enter your initials</p>
+                <input type="text" id='initials'>
+                <button>Enter</button>
+            </section>
+            <section id="highscore-container" class="hide">
+                <h2>Highscores!</h2>
+            </section>
         </main>
         <script src="./assets/js/script.js"></script>
     </body>
