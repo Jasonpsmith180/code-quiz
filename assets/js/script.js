@@ -5,7 +5,6 @@ var startContainerEl = document.getElementById('start-container');
 var questionContainerEl = document.getElementById('question-container');
 var endGameContainerEl = document.getElementById('end-game-container');
 var highScoreContainerEl = document.getElementById('highscore-container');
-var questionEl = document.getElementById('question');
 var answerButtonEl = document.getElementById('answer-buttons');
 var scoreEl = document.getElementById('score');
 var randomQuestions
@@ -51,6 +50,7 @@ function nextQuestion() {
 }
 
 function showQuestion(question) {
+    var questionEl = document.getElementById('question');
     questionEl.innerText = question.question;
     question.answers.forEach(answer => {
         var button = document.createElement('button');
@@ -124,14 +124,14 @@ function quizTimer() {
 
 function highScores() {
     startContainerEl.classList.add('hide');
-    endGameContainerEl.classList.add('hide')
-    highScoreContainerEl.classList.remove('hide')
+    endGameContainerEl.classList.add('hide');
+    highScoreContainerEl.classList.remove('hide');
 }
 
 function endGame() {
     questionContainerEl.classList.add('hide');
     endGameContainerEl.classList.remove('hide');
-    scoreEl.textContent = `Congratulations! Your score is...`;
+    scoreEl.textContent = `Score`;
 }
 
 startButton.onclick = startCountdown;
