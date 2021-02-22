@@ -17,7 +17,7 @@ Although it was a tough project I grew as a web developer and I am excited for m
 ***
 
 The password generator has been published at the following URL:  
-[Code-Quiz](https://jasonpsmith180.github.io/password-generator/)
+[Code-Quiz](https://jasonpsmith180.github.io/code-quiz/)
 
 ## Credits
 [Jason Smith](https://github.com/Jasonpsmith180)
