@@ -10,7 +10,7 @@ var initialsEl = document.getElementById('initials');
 var enterButton = document.getElementById('enter');
 var randomQuestions;
 var currentQuestion;
-var time = 30;
+var time = 60;
 var quizTimer;
 
 // start timer that counts down from 3
@@ -39,9 +39,11 @@ function startCountdown() {
 
 // function to start quiz
 function startQuiz () {
-    // hide start container and high scores button
+    // hide all containers and high scores button
     startContainerEl.classList.add('hide');
     highScoreButton.classList.add('hide');
+    endGameContainerEl.classList.add('hide');
+    highScoreContainerEl.classList.add('hide')
     // show question container
     questionContainerEl.classList.remove('hide');
     // random sort questions array
@@ -83,12 +85,14 @@ function showQuestion(question) {
     });
 }
 
+// function to reset answer buttons
 function resetState() {
     while (answerButtonEl.firstChild) {
         answerButtonEl.removeChild(answerButtonEl.firstChild)
     };
 }
 
+// function to handle answer button clicks
 function selectAnswer(event) {
     var buttonClicked = event.target;
     var correct = buttonClicked.dataset.correct;
@@ -122,8 +126,7 @@ function selectAnswer(event) {
     }
 }
 
-
-
+// css elements to be added
 function setStatus(element, correct) {
     clearStatus(element);
     if (correct) {
@@ -135,11 +138,13 @@ function setStatus(element, correct) {
     };
 }
 
+// css elements to be removed
 function clearStatus(element) {
     element.classList.remove('correct');
     element.classList.remove('incorrect');
 }
 
+// end game function
 function endGame() {
     clearInterval(quizTimer);
 
@@ -150,6 +155,7 @@ function endGame() {
     scoreEl.textContent = time;
 }
 
+// function to handle timer count
 function timerTick() {
     time--;
     quizTimerEl.textContent = time;
@@ -159,6 +165,7 @@ function timerTick() {
     }
 }
 
+// function to save highscore with user input
 function saveHighscore() {
     var initials = initialsEl.value.trim();
 
@@ -176,6 +183,7 @@ function saveHighscore() {
     highScores();
 }
 
+// function to get highscores from local storage
 function getHighscores() {
     var highscores = JSON.parse(window.localStorage.getItem("highscores")) || [];
 
@@ -193,6 +201,7 @@ function getHighscores() {
     });
 }
 
+// function to show highscore container
 function highScores() {
     startContainerEl.classList.add('hide');
     endGameContainerEl.classList.add('hide');
@@ -204,6 +213,7 @@ startButton.onclick = startCountdown;
 highScoreButton.onclick = highScores;
 enterButton.onclick = saveHighscore;
 
+// questions array
 var questions = [
     {
         question: 'What does JS stand for?',
@@ -230,11 +240,19 @@ var questions = [
             { text: 'div', correct: "true" }
     ]},
     {
-        question: 'This is a random question?',
+        question: 'Is this a gimme question?',
         answers: [
-            { text: 'yes', correct: "false" },
+            { text: 'no', correct: "false" },
             { text: 'no', correct: "false" },
             { text: 'no', correct: "false" },
             { text: 'of course', correct: "true" }
+    ]},
+    {
+        question: 'This is a useful debug tool to print content to see if code is working',
+        answers: [
+            { text: 'console.log', correct: "true" },
+            { text: 'if statements', correct: "false" },
+            { text: '.push', correct: "false" },
+            { text: 'smashing your keyboard', correct: "false" }
     ]}
 ]
