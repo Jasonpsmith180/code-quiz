@@ -6,9 +6,12 @@ var questionContainerEl = document.getElementById('question-container');
 var endGameContainerEl = document.getElementById('end-game-container');
 var highScoreContainerEl = document.getElementById('highscore-container');
 var answerButtonEl = document.getElementById('answer-buttons');
-var scoreEl = document.getElementById('score');
-var randomQuestions
-var currentQuestion
+var initialsEl = document.getElementById('initials');
+var enterButton = document.getElementById('enter');
+var randomQuestions;
+var currentQuestion;
+var time = 30;
+var quizTimer;
 
 // start timer that counts down from 5
 function startCountdown() {
@@ -29,7 +32,6 @@ function startCountdown() {
             startCountdownEl.textContent = "";
             clearInterval(timeInterval);
             console.log("Start")
-            quizTimer();
             startQuiz();
         }
     }, 1000);
@@ -41,6 +43,8 @@ function startQuiz () {
     highScoreButton.classList.add('hide');
     randomQuestions = questions.sort(() => Math.random() - .5)
     currentQuestion = 0;
+    quizTimer = setInterval(timerTick, 1000);
+    quizTimerEl.textContent = time;
     nextQuestion();
 }
 
@@ -77,18 +81,33 @@ function selectAnswer(event) {
     Array.from(answerButtonEl.children).forEach(button => {
         setStatus(button, button.dataset.correct);
     });
-    addEventListener('click', () => {
-        if (randomQuestions.length > currentQuestion + 1) {
-            currentQuestion++;
-            nextQuestion();
+    if (randomQuestions.length > currentQuestion + 1) {
+        if (buttonClicked.dataset.correct === "false"){
+            console.log("false");
+            time -= 10;
+
+            if (time < 0) {
+                time = 0;
+            }
         }
-        else {
-            addEventListener('click', () => {
-                endGame();
-            })
+        else{
+            console.log("true");
         }
-    });
+        currentQuestion++;
+        nextQuestion();
+    }
+    else {
+        if (buttonClicked.dataset.correct === "false"){
+            console.log("false");
+        }
+        else{
+            console.log("true");
+        }
+        endGame();
+    }
 }
+
+
 
 function setStatus(element, correct) {
     clearStatus(element);
@@ -106,60 +125,100 @@ function clearStatus(element) {
     element.classList.remove('incorrect');
 }
 
-function quizTimer() {
-    var timeLeft = 10;
+function endGame() {
+    clearInterval(quizTimer);
 
-    // use setInterval() to decrement timeLeft by 1 every second
-    var timeInterval = setInterval(function() {
-        if (timeLeft > -1) {
-            quizTimerEl.textContent = `Time: ${timeLeft}`;
-            timeLeft--;
-        }
-        else {
-            clearInterval(timeInterval);
-            endGame();
+    questionContainerEl.classList.add('hide');
+    endGameContainerEl.classList.remove('hide');
+
+    var scoreEl = document.getElementById('score');
+    scoreEl.textContent = time;
+}
+
+function timerTick() {
+    time--;
+    quizTimerEl.textContent = time;
+
+    if (time <= 0) {
+        endGame();
+    }
+}
+
+function saveHighscore() {
+    var initials = initialsEl
+
+    console.log(initials);
+
+    if(initials !== "") {
+        var highscores = JSON.parse(window.localStorage.getItem('highscores')) || [];
+
+        var newScore = {
+            score: time,
+            initials: initials
         };
-    }, 1000);
+
+        highscores.push(newScore);
+        window.localStorage.setItem("highscores", JSON.stringify(highscores));
+
+        highScores();
+    }
+}
+
+function getHighscores() {
+    var highscores = JSON.parse(window.localStorage.getItem("highscores")) || [];
+
+    highscores.sort(function(a, b) {
+        var listItem = document.createElement("li");
+        listItem.textContent = `${score.initials} - ${score.score}`;
+
+        var orderedListEl = document.getElementById('scores-list');
+        orderedListEl.appendChild(listItem);
+    });
 }
 
 function highScores() {
     startContainerEl.classList.add('hide');
     endGameContainerEl.classList.add('hide');
     highScoreContainerEl.classList.remove('hide');
-}
-
-function endGame() {
-    questionContainerEl.classList.add('hide');
-    endGameContainerEl.classList.remove('hide');
-    scoreEl.textContent = `Score`;
+    getHighscores();
 }
 
 startButton.onclick = startCountdown;
 highScoreButton.onclick = highScores;
+enterButton.onclick = saveHighscore;
+enterButton.onclick = highScores;
 
 var questions = [
     {
         question: 'What does JS stand for?',
         answers: [
-            { text: 'JavaScript', correct: true },
-            { text: 'Flexbox', correct: false},
-            { text: 'Cascading Spreadsheets', correct: false },
-            { text: 'Jquery', correct: false}
+            { text: 'JavaScript', correct: "true" },
+            { text: 'Flexbox', correct: "false"},
+            { text: 'Cascading Spreadsheets', correct: "false" },
+            { text: 'Jquery', correct: "false"}
     ]},
     {
         question: 'What tag denotes the start of a segment of JavaScript code',
         answers: [
-            { text: '<js>', correct: false },
-            { text: '<code>', correct: false},
-            { text: '<script>', correct: true },
-            { text: '<run>', correct: false}
+            { text: '<js>', correct: "false" },
+            { text: '<code>', correct: "false"},
+            { text: '<script>', correct: "true" },
+            { text: '<run>', correct: "false"}
     ]},
     {
         question: 'Which of these elements does Javascript NOT use?',
         answers: [
-            { text: 'functions', correct: false },
-            { text: 'boolean', correct: false},
-            { text: 'array', correct: false },
-            { text: 'div', correct: true}
+            { text: 'functions', correct: "false" },
+            { text: 'boolean', correct: "false" },
+            { text: 'array', correct: "false" },
+            { text: 'div', correct: "true" }
+    ]},
+    {
+        question: 'This is a random question?',
+        answers: [
+            { text: 'yes', correct: "false" },
+            { text: 'no', correct: "false" },
+            { text: 'no', correct: "false" },
+            { text: 'of course', correct: "true" }
     ]}
 ]
