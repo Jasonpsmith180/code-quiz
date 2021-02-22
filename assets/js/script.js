@@ -55,22 +55,30 @@ function startQuiz () {
     nextQuestion();
 }
 
+// function for next question
 function nextQuestion() {
+    // reset any existing questions before showing new question
     resetState();
     showQuestion(randomQuestions[currentQuestion]);
 }
 
+// function to show question
 function showQuestion(question) {
+    // get question element
     var questionEl = document.getElementById('question');
+    // add attributes
     questionEl.innerText = question.question;
+    // create answer buttons
     question.answers.forEach(answer => {
         var button = document.createElement('button');
+        // add attributes
         button.classList.add('answer-button')
         button.innerText = answer.text;
         if (answer.correct) {
             button.dataset.correct = answer.correct;
         };
         button.addEventListener('click', selectAnswer);
+        // send to page
         answerButtonEl.appendChild(button);
     });
 }
