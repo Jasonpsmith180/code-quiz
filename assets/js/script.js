@@ -13,10 +13,10 @@ var currentQuestion;
 var time = 30;
 var quizTimer;
 
-// start timer that counts down from 5
+// start timer that counts down from 3
 function startCountdown() {
     var startCountdownEl = document.getElementById('startCountdown');
-    var timeToStart = 1;
+    var timeToStart = 3;
 
     // use setInterval() to decrement timeLeft by 1 every second
     var timeInterval = setInterval(function() {
@@ -37,14 +37,21 @@ function startCountdown() {
     }, 1000);
 }
 
+// function to start quiz
 function startQuiz () {
+    // hide start container and high scores button
     startContainerEl.classList.add('hide');
-    questionContainerEl.classList.remove('hide');
     highScoreButton.classList.add('hide');
+    // show question container
+    questionContainerEl.classList.remove('hide');
+    // random sort questions array
     randomQuestions = questions.sort(() => Math.random() - .5)
     currentQuestion = 0;
+
+    // start timer
     quizTimer = setInterval(timerTick, 1000);
     quizTimerEl.textContent = time;
+    // show question
     nextQuestion();
 }
 
@@ -145,9 +152,7 @@ function timerTick() {
 }
 
 function saveHighscore() {
-    var initials = initialsEl
-
-    console.log(initials);
+    var initials = initialsEl.value.trim();
 
     if(initials !== "") {
         var highscores = JSON.parse(window.localStorage.getItem('highscores')) || [];
@@ -159,19 +164,23 @@ function saveHighscore() {
 
         highscores.push(newScore);
         window.localStorage.setItem("highscores", JSON.stringify(highscores));
-
-        highScores();
     }
+    highScores();
 }
 
 function getHighscores() {
     var highscores = JSON.parse(window.localStorage.getItem("highscores")) || [];
 
+    console.log(highscores);
     highscores.sort(function(a, b) {
-        var listItem = document.createElement("li");
-        listItem.textContent = `${score.initials} - ${score.score}`;
+        return b.score - a.score;
+    });
 
-        var orderedListEl = document.getElementById('scores-list');
+    highscores.forEach(function(score) {
+        var listItem = document.createElement("li");
+        listItem.textContent = score.initials + " - " + score.score;
+
+        var orderedListEl = document.getElementById('score-list');
         orderedListEl.appendChild(listItem);
     });
 }
@@ -186,7 +195,6 @@ function highScores() {
 startButton.onclick = startCountdown;
 highScoreButton.onclick = highScores;
 enterButton.onclick = saveHighscore;
-enterButton.onclick = highScores;
 
 var questions = [
     {
